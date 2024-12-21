@@ -19,7 +19,9 @@ namespace Funbit.Ets.Telemetry.Server
     {
         IDisposable _server;
         static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+        private readonly ISerialPortManager _serialPortManager;
+        private readonly ArduinoTelemetryController _arduinoTelemetryController;
+        
         readonly HttpClient _broadcastHttpClient = new HttpClient();
         static readonly Encoding Utf8 = new UTF8Encoding(false);
         static readonly string BroadcastUrl = ConfigurationManager.AppSettings["BroadcastUrl"];
@@ -35,12 +37,55 @@ namespace Funbit.Ets.Telemetry.Server
         public MainForm()
         {
             InitializeComponent();
+            Program.NotifierMessage.MessageChanged += OnStatusLogChanged;
+
+            _serialPortManager = new SerialPortManager();
+            _arduinoTelemetryController = new ArduinoTelemetryController(_serialPortManager);
+            _arduinoTelemetryController.RunApplication();
+
         }
+
+        
 
         static string IpToEndpointUrl(string host)
         {
             return $"http://{host}:{ConfigurationManager.AppSettings["Port"]}";
         }
+
+        private void OnStatusLogChanged(LogMessage newMessage)
+        {
+            try
+            {
+                if (!newMessage.IsConnectionMessage)
+                {
+                    if (InvokeRequired)
+                    {
+                        Invoke(new Action(() => sendLogLabel.Text = newMessage.Message));
+                    }
+                    else
+                    {
+                        sendLogLabel.Text = newMessage.Message;
+                    }
+
+
+                    return;
+                }
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => arduinoStatus.Text = newMessage.Message));
+                }
+                else
+                {
+                    arduinoStatus.Text = newMessage.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
 
         void Setup()
         {
@@ -71,6 +116,23 @@ namespace Funbit.Ets.Telemetry.Server
             }
         }
 
+
+        private void LoadArduinoPorts()
+        { // load arduino ports
+            var ports = ArduinoHleper.ListArduinoPorts();
+            arduinoPorts.Items.Clear();
+            foreach (var port in ports)
+                arduinoPorts.Items.Add($"{port}");
+
+            var rememberedPort = ports.FirstOrDefault(
+                i => i == Settings.Instance.ArduinoPort);
+            if (rememberedPort != null)
+                arduinoPorts.SelectedItem = rememberedPort;
+            else
+                arduinoPorts.SelectedIndex = 0;
+
+        }
+
         void Start()
         {
             try
@@ -80,6 +142,10 @@ namespace Funbit.Ets.Telemetry.Server
                 interfacesDropDown.Items.Clear();
                 foreach (var networkInterface in networkInterfaces)
                     interfacesDropDown.Items.Add(networkInterface);
+
+                // load arduino ports
+                LoadArduinoPorts();
+
                 // select remembered interface or default
                 var rememberedInterface = networkInterfaces.FirstOrDefault(
                     i => i.Id == Settings.Instance.DefaultNetworkInterfaceId);
@@ -115,7 +181,8 @@ namespace Funbit.Ets.Telemetry.Server
                 ex.ShowAsMessageBox(this, @"Network error", MessageBoxIcon.Exclamation);
             }
         }
-        
+
+
         void MainForm_Load(object sender, EventArgs e)
         {
             // log current version for debugging
@@ -135,6 +202,7 @@ namespace Funbit.Ets.Telemetry.Server
         {
             _server?.Dispose();
             trayIcon.Visible = false;
+            _serialPortManager.ClosePort();
         }
     
         void closeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -251,6 +319,17 @@ namespace Funbit.Ets.Telemetry.Server
         void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // TODO: implement later
+        }
+
+        private void arduinoPorts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var arduinoPort = (String)arduinoPorts.SelectedItem;
+
+            Settings.Instance.ArduinoPort = arduinoPort;
+            Settings.Instance.Save();
+            //ArduinoTelemetryController.ForceClosePort();
+            //ArduinoTelemetryController.UpdateArduinoPort();
+
         }
     }
 }
