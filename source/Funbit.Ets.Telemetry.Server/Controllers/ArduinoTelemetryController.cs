@@ -20,26 +20,25 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
         public ArduinoTelemetryController(ISerialPortManager serialPortManager)
         {
             _serialPortManager = serialPortManager;
-            _serialPortManager.PortChanged += OnPortChanged;
+            //_serialPortManager.PortChanged += OnPortChanged;
         }
 
-        private void OnPortChanged(object sender, SerialPortChangedEventArgs e)
-        {
-            try
-            {
-                _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
-                Console.WriteLine($"Porta alterada de {e.OldPortName} para {e.NewPortName}");
-                Program.NotifierMessage.LogMessage = new LogMessage(true, $"Porta alterada de {e.OldPortName} para {e.NewPortName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro geral: {ex.Message}");
-                Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
-                Log.Error(ex);
-                _serialPortManager.ClosePort();
-                _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
-            }
-        }
+        //private void OnPortChanged(object sender, SerialPortChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
+        //        Console.WriteLine($"Porta alterada de {e.OldPortName} para {e.NewPortName}");
+        //        Program.NotifierMessage.LogMessage = new LogMessage(true, $"Porta alterada de {e.OldPortName} para {e.NewPortName}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Erro geral: {ex.Message}");
+        //        Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
+        //        Log.Error(ex);
+        //        _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
+        //    }
+        //}
 
         public void RunApplication()
         {

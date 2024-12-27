@@ -327,8 +327,8 @@ namespace Funbit.Ets.Telemetry.Server
 
             Settings.Instance.ArduinoPort = arduinoPort;
             Settings.Instance.Save();
-            //ArduinoTelemetryController.ForceClosePort();
-            //ArduinoTelemetryController.UpdateArduinoPort();
+            _serialPortManager.PortChange();
+            
 
         }
     }
