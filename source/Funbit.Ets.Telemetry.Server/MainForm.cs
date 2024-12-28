@@ -82,7 +82,7 @@ namespace Funbit.Ets.Telemetry.Server
             }
             catch (Exception ex)
             {
-
+                Log.Error(ex);
             }
         }
 
@@ -327,9 +327,14 @@ namespace Funbit.Ets.Telemetry.Server
 
             Settings.Instance.ArduinoPort = arduinoPort;
             Settings.Instance.Save();
-            //ArduinoTelemetryController.ForceClosePort();
-            //ArduinoTelemetryController.UpdateArduinoPort();
+            _serialPortManager.PortChange();
+            
 
+        }
+
+        private void refreshPortsButton_Click(object sender, EventArgs e)
+        {
+            LoadArduinoPorts();
         }
     }
 }

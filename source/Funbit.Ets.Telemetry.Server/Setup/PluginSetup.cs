@@ -112,8 +112,7 @@ namespace Funbit.Ets.Telemetry.Server.Setup
         {
             const string InstallationSkippedPath = "N/A";
             const string TelemetryDllName = "ets2-telemetry-server.dll";
-            const string TelemetryX64DllMd5 = "aeffffe2e6c3c4fd6ef1ad1eb44171cd";
-            const string TelemetryX86DllMd5 = "ab473bea2dd9480e249133ec908e8252";
+            const string TelemetryX64DllMd5 = "d606f27c94bcae1114d930d8e83b6fa2";
 
             readonly string _gameName;
 
@@ -159,8 +158,7 @@ namespace Funbit.Ets.Telemetry.Server.Setup
                 if (!IsPathValid())
                     return false;
 
-                return Md5(GetTelemetryPluginDllFileName(GamePath, x64: true)) == TelemetryX64DllMd5 &&
-                    Md5(GetTelemetryPluginDllFileName(GamePath, x64: false)) == TelemetryX86DllMd5;
+                return Md5(GetTelemetryPluginDllFileName(GamePath)) == TelemetryX64DllMd5;
             }
 
             public void InstallPlugin()
@@ -168,11 +166,7 @@ namespace Funbit.Ets.Telemetry.Server.Setup
                 if (GamePath == InstallationSkippedPath)
                     return;
 
-                string x64DllFileName = GetTelemetryPluginDllFileName(GamePath, x64: true);
-                string x86DllFileName = GetTelemetryPluginDllFileName(GamePath, x64: false);
-
-                Log.InfoFormat("Copying {1} x86 plugin DLL file to: {0}", x86DllFileName, _gameName);
-                File.Copy(LocalEts2X86TelemetryPluginDllFileName, x86DllFileName, true);
+                string x64DllFileName = GetTelemetryPluginDllFileName(GamePath);
 
                 Log.InfoFormat("Copying {1} x64 plugin DLL file to: {0}", x64DllFileName, _gameName);
                 File.Copy(LocalEts2X64TelemetryPluginDllFileName, x64DllFileName, true);
@@ -184,15 +178,10 @@ namespace Funbit.Ets.Telemetry.Server.Setup
                     return;
 
                 Log.InfoFormat("Backing up plugin DLL files for {0}...", _gameName);
-                string x64DllFileName = GetTelemetryPluginDllFileName(GamePath, x64: true);
-                string x86DllFileName = GetTelemetryPluginDllFileName(GamePath, x64: false);
-                string x86BakFileName = Path.ChangeExtension(x86DllFileName, ".bak");
+                string x64DllFileName = GetTelemetryPluginDllFileName(GamePath);
                 string x64BakFileName = Path.ChangeExtension(x64DllFileName, ".bak");
-                if (File.Exists(x86BakFileName))
-                    File.Delete(x86BakFileName);
                 if (File.Exists(x64BakFileName))
                     File.Delete(x64BakFileName);
-                File.Move(x86DllFileName, x86BakFileName);
                 File.Move(x64DllFileName, x64BakFileName);
             }
 
@@ -202,20 +191,17 @@ namespace Funbit.Ets.Telemetry.Server.Setup
                 return steamKey?.GetValue("SteamPath") as string;
             }
 
-            static string LocalEts2X86TelemetryPluginDllFileName => Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory, @"Ets2Plugins\win_x86\plugins\", TelemetryDllName);
-
             static string LocalEts2X64TelemetryPluginDllFileName => Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory, @"Ets2Plugins\win_x64\plugins", TelemetryDllName);
             
-            static string GetPluginPath(string gamePath, bool x64)
+            static string GetPluginPath(string gamePath)
             {
-                return Path.Combine(gamePath, x64 ? @"bin\win_x64\plugins" : @"bin\win_x86\plugins");
+                return Path.Combine(gamePath, @"bin\win_x64\plugins");
             }
 
-            static string GetTelemetryPluginDllFileName(string gamePath, bool x64)
+            static string GetTelemetryPluginDllFileName(string gamePath)
             {
-                string path = GetPluginPath(gamePath, x64);
+                string path = GetPluginPath(gamePath);
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 return Path.Combine(path, TelemetryDllName);

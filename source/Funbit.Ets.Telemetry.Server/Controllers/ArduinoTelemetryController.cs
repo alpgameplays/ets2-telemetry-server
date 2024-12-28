@@ -16,40 +16,51 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
     {
         private ISerialPortManager _serialPortManager;
         static readonly log4net.ILog Log = log4net.LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         public ArduinoTelemetryController(ISerialPortManager serialPortManager)
         {
             _serialPortManager = serialPortManager;
-            _serialPortManager.PortChanged += OnPortChanged;
+            //_serialPortManager.PortChanged += OnPortChanged;
         }
 
-        private void OnPortChanged(object sender, SerialPortChangedEventArgs e)
-        {
-            try
-            {
-                _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
-                Console.WriteLine($"Porta alterada de {e.OldPortName} para {e.NewPortName}");
-                Program.NotifierMessage.LogMessage = new LogMessage(true, $"Porta alterada de {e.OldPortName} para {e.NewPortName}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Erro geral: {ex.Message}");
-                Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
-                Log.Error(ex);
-                _serialPortManager.ClosePort();
-                _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
-            }
-        }
+        //private void OnPortChanged(object sender, SerialPortChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
+        //        Console.WriteLine($"Porta alterada de {e.OldPortName} para {e.NewPortName}");
+        //        Program.NotifierMessage.LogMessage = new LogMessage(true, $"Porta alterada de {e.OldPortName} para {e.NewPortName}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Erro geral: {ex.Message}");
+        //        Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
+        //        Log.Error(ex);
+        //        _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
+        //    }
+        //}
+
+        //private void ReadDeviceName()
+        //{
+        //    if (_deviceName == null)
+        //    {
+        //        _deviceName = _serialPortManager.ReadFromPort();
+
+        //        var devicePortName = _serialPortManager.GetDeviceName();
+        //        Program.NotifierMessage.LogMessage = new LogMessage(true, $"Conexão estabelecida com {devicePortName}\nDispositivos: {_deviceName}");
+        //    }
+        //}
 
         public void RunApplication()
         {
             Task.Run(() =>
             {
+
+                
                 while (true)
                 {
                     try
                     {
-                        Thread.Sleep(50);
+                        Thread.Sleep(100);
                         var json = Ets2TelemetryController.GetEts2TelemetryJson();
 
                         Console.WriteLine("Enviando JSON para o Arduino:");
@@ -59,6 +70,7 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
 
                         if (_serialPortManager.IsPortOpen())
                         {
+                            _serialPortManager.ReadFromPort();
                             _serialPortManager.WriteToPort(json);
                             Program.NotifierMessage.LogMessage = new LogMessage(false, $"JSON enviado com sucesso! {DateTime.Now}");
                             Console.WriteLine("JSON enviado com sucesso!");
@@ -75,6 +87,7 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
                         Console.WriteLine($"Erro de operação inválida: {ex.Message}");
                         Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro de operação inválida: {ex.Message}");
                         Log.Error(ex);
+                        
                         _serialPortManager.ClosePort();
                         _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
                     }
@@ -83,6 +96,7 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
                         Console.WriteLine($"Erro de IO: {ex.Message}");
                         Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro de IO: {ex.Message}");
                         Log.Error(ex);
+                        
                         _serialPortManager.ClosePort();
                         _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
                     }
@@ -91,6 +105,7 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
                         Console.WriteLine($"Erro geral: {ex.Message}");
                         Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
                         Log.Error(ex);
+                        
                         _serialPortManager.ClosePort();
                         _serialPortManager.OpenPort(Settings.Instance.ArduinoPort);
                     }

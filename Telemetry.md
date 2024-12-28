@@ -18,7 +18,7 @@ A floating point value. Example: 40.1233
 
 #### date
 
-Date types are always serialized to [ISO 8601 ](http://en.wikipedia.org/wiki/ISO_8601)string in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time) time zone. Counting starts from 0001 year when 1st January is Monday. Example: "0001-01-05T05:11:00Z".
+Date types are always serialized to an [ISO 8601](http://en.wikipedia.org/wiki/ISO_8601) string in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time). Counting starts from year 0001 when 1st January is Monday. Example: "0001-01-05T05:11:00Z".
 
 If you want to convert date string to Javascript date object inside dashboard.js skin file you may use the following technique:
 
@@ -138,6 +138,14 @@ Current version of the telemetry plugin DLL file (revision).
 		Type: 		string
 		Example: 	"4"
 		CSS Class: 	game-telemetryPluginVersion
+		
+##### game.maxTrailerCount
+
+The maximum number of trailers supported by the telemetry SDK.
+
+		Type:		integer
+		Example:	10
+		CSS Class:	game-maxTrailerCount
 
 ## Truck
 
@@ -785,61 +793,183 @@ Position of the trailer connection hook in vehicle space.
 		CSS Classes: 	truck-hook-x
 						truck-hook-y
 						truck-hook-z
+						
+##### truck.licensePlate
 
-## Trailer
+The license plate affixed to the truck.
 
-##### trailer.attached
+		Type:			string
+		Example:		"ABC123"
+		CSS Class:		truck-licensePlate
+		
+##### truck.licensePlateCountryId
+
+Country ID of the license plate (internal).
+
+		Type:			string
+		Example:		"arizona"
+		CSS Class:		truck-licensePlateCountryId
+		
+##### truck.licensePlateCountry
+
+The license plate's localized country (ETS2) or state (ATS).
+
+		Type:			string
+		Example:		"Arizona"
+		CSS Class:		truck-licensePlateCountry
+
+## Trailers
+
+The telemetry API will always return 10 trailers, indicated as trailer1, trailer2, etc. When referring to the proper CSS class, replace the `#` symbol with the proper trailer number.
+
+##### trailer#.trailerNumber
+
+The sequence number of the trailer (1 being first, 10 being last)
+
+		Type:		integer
+		Example:	1
+		CSS Class:	trailer#-trailerNumber
+
+##### trailer#.attached
 
 Is the trailer attached to the truck or not.
 
 		Type: 		boolean
 		Example: 	true
-		CSS Class: 	trailer-attached
+		CSS Class: 	trailer#-attached
+		
+##### trailer#.present
 
-##### trailer.id
+Does the trailer exist in the game world?
 
-Id of the cargo (internal).
+		Type:		boolean
+		Example:	true
+		CSS Class:	trailer#-present
+
+##### trailer#.id
+
+Id of the trailer (internal).
 
 		Type: 		string
-		Example: 	"derrick"
-		CSS Class: 	trailer-id
+		Example: 	"vehicle.scs.box"
+		CSS Class: 	trailer#-id
 
-##### trailer.name
+##### trailer#.name
 
 Localized name of the current trailer for display purposes.
 
 		Type: 		string
-		Example: 	"Derrick"
-		CSS Class: 	trailer-name
+		Example: 	"A-KRB-18"
+		CSS Class: 	trailer#-name
 
-##### trailer.mass
+##### trailer#.wearWheels
 
-Mass of the cargo in kilograms.
-
-		Type: 		float
-		Example: 	22000.5
-		CSS Class: 	trailer-mass
-
-##### trailer.wear
-
-Current level of trailer wear/damage between 0 (min) and 1 (max).
+Current level of trailer wheel wear/damage between 0 (min) and 1 (max).
 
 		Type: 		float
 		Example: 	0.0314717
-		CSS Class: 	trailer-wear
+		CSS Class: 	trailer#-wearWheels
 
-##### trailer.placement
+##### trailer#.wearChassis
+
+Current level of trailer chassis wear/damage between 0 (min) and 1 (max).
+
+		Type: 		float
+		Example: 	0.0314717
+		CSS Class: 	trailer#-wearChassis
+		
+##### trailer#.cargoDamage
+
+Current level of cargo damage in the specific trailer between 0 (min) and 1 (max).
+
+		Type:		float
+		Example:	0.0314717
+		CSS Class:	trailer#-cargoDamage
+		
+##### trailer#.cargoAccessoryId
+
+Unknown
+
+		Type:		string
+		Example:	""
+		CSS Class:	trailer#-cargoAccessoryId
+		
+##### trailer#.brandId
+
+Id of the trailer's brand (internal).
+
+		Type:		string
+		Example:	"scs"
+		CSS Class:	trailer#-brandId
+		
+##### trailer#.brand
+
+Localized name of the trailer's brand for display purposes.
+
+		Type:		string
+		Example:	""
+		CSS Class:	trailer#-brand
+		
+##### trailer#.bodyType
+
+Type of the trailer
+
+		Type:		string
+		Example:	"refrigerated"
+		CSS Class:	trailer#-bodyType
+		
+##### trailer#.cargo
+
+Type of cargo the trailer can deliver
+
+		Type:		string
+		Example:	"refrigerated"
+		CSS Class:	trailer#-cargo
+		
+##### trailer#.licensePlate
+
+The license plate affixed to the trailer.
+
+		Type:			string
+		Example:		"ABC123"
+		CSS Class:		trailer#-licensePlate
+		
+##### trailer#.licensePlateCountryId
+
+Country ID of the license plate (internal).
+
+		Type:			string
+		Example:		"arizona"
+		CSS Class:		trailer#-licensePlateCountryId
+		
+##### trailer#.licensePlateCountry
+
+The license plate's localized country (ETS2) or state (ATS).
+
+		Type:			string
+		Example:		"Arizona"
+		CSS Class:		trailer#-licensePlateCountry
+		
+##### trailer#.chainType
+
+The type of trailer.
+
+		Type:			string
+		Example:		"double"
+		CSS Class:		trailer#-chainType
+
+##### trailer#.placement
 
 Current trailer placement in the game world.
 
 		Type: 			placement
 		Example: 		-
-		CSS Classes: 	trailer-placement-x
-						trailer-placement-y
-						trailer-placement-z
-						trailer-placement-heading
-						trailer-placement-pitch
-						trailer-placement-roll
+		CSS Classes: 	trailer#-placement-x
+						trailer#-placement-y
+						trailer#-placement-z
+						trailer#-placement-heading
+						trailer#-placement-pitch
+						trailer#-placement-roll
 
 ## Job
 
@@ -898,6 +1028,80 @@ Localized name of the destination company for display purposes.
 		Type: 		string
 		Example: 	"JCB"
 		CSS Class: 	job-destinationCompany
+		
+##### job.specialTransport
+
+Is this job a special transport job?
+
+		Type: 		boolean
+		Example: 	false
+		CSS Class: 	job-specialTransport
+		
+##### job.jobMarket
+
+The job market the job came from. Possible values: `"quick_job"`, `"cargo_market"`, `"freight_market"`, `"external_contracts"`, `"external_market"`
+
+		Type: 		string
+		Example: 	"quick_job"
+		CSS Class: 	job-jobMarket
+		
+## Cargo
+
+##### cargo.cargoLoaded
+
+Is the cargo loaded into the trailer? (**NOTE**: This will always be true for jobs that do not use a player-owned trailer)
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	cargo-cargoLoaded
+		
+##### cargo.cargoId
+
+Internal ID of the cargo.
+
+		Type:		string
+		Example:	"derrick"
+		CSS Class:	cargo-cargoId
+		
+##### cargo.cargo
+
+Localized name of the cargo for display purposes.
+
+		Type:		string
+		Example:	"Derrick"
+		CSS Class:	cargo-cargo
+		
+##### cargo.mass
+
+The total mass of the cargo in kilograms.
+
+		Type:		float
+		Example:	3.1415
+		CSS Class:	cargo-mass
+		
+##### cargo.unitMass
+
+The mass of one piece of cargo in kilograms
+
+		Type:		float
+		Example:	3.1415
+		CSS Class:	cargo-unitMass
+		
+##### cargo.unitCount
+
+The number of units of cargo in the trailer(s).
+
+		Type:		integer
+		Example:	200
+		CSS Class:	cargo-unitCount
+		
+##### cargo.damage
+
+The total amount of damaged cargo between 0 (min) and 1 (max).
+
+		Type:		float
+		Example:	0.0031415
+		CSS Class:	cargo-damage
 
 ## Navigation
 
@@ -924,3 +1128,236 @@ Current value of the "Route Advisor speed limit" in km/h.
 		Type: 		integer
 		Example: 	50
 		CSS Class: 	navigation-speedLimit
+		
+## Events
+
+Events are new as of ETS2 / ATS 1.35. Each event has a `boolean` property that is `true` for 10 frames when activated; it then switches back to `false`.  However, after the 10 frames, 
+the information is NOT cleared from the API, allowing you to use the data for as long as needed.
+
+### Fines
+
+##### finedEvent.fined
+
+Whether or not the user has recently received a fine.
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	finedEvent-fined
+		
+##### finedEvent.fineOffense
+
+The type of offense the user was fined for. Possible values:
+  - `"crash"`: Player crashed into another vehicle (or vice-versa :wink:)
+  - `"avoid_sleeping"`: Player ignored sleeping requirements
+  - `"wrong_way"`: Player drove on the wrong side of the road
+  - `"speeding_camera"`: Player caught speeding by a traffic camera
+  - `"no_lights"`: Player caught driving with headlights off during nighttime hours]
+  - `"red_signal"`: Player drove through a red signal
+  - `"speeding"`: Player caught speeding by a police officer on the road
+  - `"avoid_weighing"`: Player skipped weigh station when prompted (ATS only)
+  - `"illegal_trailer"`: Player drove a trailer into a country/state that does not allow the player's trailer configuration
+  - `"generic"`: ??? (Please open an issue if you encounter this offense so this documentation can be updated)
+  
+		Type:		string
+		Example:	"crash"
+		CSS Class:	finedEvent-fineOffense
+		
+##### finedEvent.fineAmount
+
+The amount the user was fined in internal game-specific currency.
+
+		Type:		integer
+		Example:	900
+		CSS Class:	finedEvent-fineAmount
+		
+### Job Completion / Cancelation
+
+##### jobEvent.jobFinished
+
+`true` when a job is finished
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	jobEvent-jobFinished
+		
+##### jobEvent.jobCancelled
+
+`true` when the user cancels their current job
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	jobEvent-jobCancelled
+		
+##### jobEvent.jobDelivered
+
+`true` when the user delivers the cargo to the destination
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	jobEvent-jobDelivered
+		
+##### jobEvent.cancelPenalty
+
+The amount of internal game-specific currency the user was fined for canceling the job
+
+		Type:		integer
+		Example:	900
+		CSS Class:	jobEvent-cancelPenalty
+		
+##### jobEvent.revenue
+
+The amount of total revenue earned from the delivery
+
+		Type:		integer
+		Example:	900
+		CSS Class:	jobEvent-revenue
+		
+##### jobEvent.earnedXp
+
+The amount of experience (XP) earned from completing the delivery
+
+		Type:		integer
+		Example:	900
+		CSS Class:	jobEvent-earnedXp
+		
+##### jobEvent.cargoDamage
+
+The total amount of damaged cargo between 0 (min) and 1 (max).
+
+		Type:		float
+		Example:	0.0031415
+		CSS Class:	jobEvent-cargoDamage
+		
+##### jobEvent.distance
+
+The total distance traveled to complete the delivery.
+
+		Type:		integer
+		Example:	900
+		CSS Class:	jobEvent-distance
+		
+##### jobEvent.deliveryTime
+
+The time it took to complete the delivery in in-game time.
+
+		Type:		date
+		Example:	"0001-01-01T10:52:00Z"
+		CSS Class:	jobEvent-deliveryTime
+		
+##### jobEvent.autoparkUsed
+
+`true` if the user skipped parking
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	jobEvent-autoparkUsed
+		
+##### jobEvent.autoloadUsed
+
+`true` if the user skipped loading their trailer
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	jobEvent-autoloadUsed
+		
+### Tollgates
+
+##### tollgateEvent.tollgateUsed
+
+`true` if the user recently used a tollgate / toll booth.
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	tollgateEvent-tollgateUsed
+		
+##### tollgateEvent.payAmount
+
+The amount the player paid in internal game-specific currency.
+
+		Type:		int
+		Example:	900
+		CSS Class:	tollgateEvent-payAmount
+		
+### Ferries
+
+##### ferryEvent.ferryUsed
+
+`true` if the user recently used a ferry.
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	ferryEvent-ferryUsed
+		
+##### ferryEvent.sourceId
+
+Internal ID of the source ferry port.
+
+		Type:		string
+		Example:	"europoort"
+		CSS Class:	ferryEvent-sourceId
+		
+##### ferryEvent.sourceName
+
+Localized name of the source ferry port for display purposes.
+
+		Type:		string
+		Example:	"Europoort"
+		CSS Class:	ferryEvent-sourceName
+		
+##### ferryEvent.targetId
+
+Internal ID of the target ferry port.
+
+		Type:		string
+		Example:	"europoort"
+		CSS Class:	ferryEvent-targetId
+		
+##### ferryEvent.targetName
+
+Localized name of the target ferry port for display purposes.
+
+		Type:		string
+		Example:	"Europoort"
+		CSS Class:	ferryEvent-targetName
+		
+### Trains
+
+##### trainEvent.trainUsed
+
+`true` if the user recently used a train.
+
+		Type:		boolean
+		Example:	false
+		CSS Class:	trainEvent-trainUsed
+		
+##### trainEvent.sourceId
+
+Internal ID of the source train station.
+
+		Type:		string
+		Example:	"id"
+		CSS Class:	trainEvent-sourceId
+		
+##### trainEvent.sourceName
+
+Localized name of the source train station for display purposes.
+
+		Type:		string
+		Example:	"Station Name"
+		CSS Class:	trainEvent-sourceName
+		
+##### trainEvent.targetId
+
+Internal ID of the target train station.
+
+		Type:		string
+		Example:	"id"
+		CSS Class:	trainEvent-targetId
+		
+##### trainEvent.targetName
+
+Localized name of the target train station for display purposes.
+
+		Type:		string
+		Example:	"Station Name"
+		CSS Class:	ferry-targetName

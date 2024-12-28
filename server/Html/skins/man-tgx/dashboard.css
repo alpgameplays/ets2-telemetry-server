@@ -209,7 +209,7 @@ body {
 .truck-lightsParkingOn.yes {
   background-image: url("images/parklights-on.png");
 }
-.trailer-mass {
+.cargo-mass {
   color: #B2B5AF;
   font-family: Courier New, Courier, monospace;
   font-size: 30px;
