@@ -189,6 +189,10 @@ Thank you!
 
 ## Version history
 
+### 5.0.0
+
+- Added support to send data to Arduino
+
 ### 4.0.0
 
 - Added support for ETS2 / ATS 1.35

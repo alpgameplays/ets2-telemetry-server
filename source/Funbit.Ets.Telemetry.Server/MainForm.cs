@@ -82,7 +82,7 @@ namespace Funbit.Ets.Telemetry.Server
             }
             catch (Exception ex)
             {
-
+                Log.Error(ex);
             }
         }
 

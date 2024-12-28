@@ -67,8 +67,8 @@ Global
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|iOS.ActiveCfg = Release|Any CPU
-		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Windows Phone (Universal).ActiveCfg = Release|Any CPU
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Windows Phone 8.ActiveCfg = Release|Any CPU
 		{5DDDD979-7911-4E6E-877D-4674E3DD7E62}.Release|Windows-AnyCPU.ActiveCfg = Release|Any CPU
