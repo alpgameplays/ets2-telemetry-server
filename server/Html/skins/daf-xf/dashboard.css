@@ -214,7 +214,7 @@ body {
 .truck-airPressureWarningOn.yes {
   background-image: url("images/warning.png");
 }
-.trailer-mass {
+.cargo-mass {
   color: #D8DFE5;
   font-family: Courier New, Courier, monospace;
   font-weight: bold;
