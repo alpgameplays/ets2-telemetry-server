@@ -15,6 +15,7 @@ module Funbit.Ets.Telemetry {
         nextRestStopTime: string = "";
         version: string = "";
         telemetryPluginVersion: string = "";
+		maxTrailerCount: number = 10;
     }
 
     class Ets2Job {
@@ -25,6 +26,8 @@ module Funbit.Ets.Telemetry {
         sourceCompany: string = "";
         destinationCity: string = "";
         destinationCompany: string = "";
+        specialTransport: boolean = false;
+        jobMarket: string = "";
     }
 
     class Ets2Truck {
@@ -108,6 +111,9 @@ module Funbit.Ets.Telemetry {
         head: Ets2Vector;
         cabin: Ets2Vector;
         hook: Ets2Vector;
+		licensePlate: string = "";
+		licensePlateCountryId: string = "";
+		licensePlateCountry: string = "";
         constructor() {
             this.placement = new Ets2Placement();
             this.acceleration = new Ets2Vector();
@@ -117,12 +123,34 @@ module Funbit.Ets.Telemetry {
         }
     }
 
+    class Ets2Cargo {
+        cargoLoaded: boolean = false;
+        cargoId: string = "";
+        cargo: string = "";
+        mass: number = 0;
+        unitMass: number = 0;
+        unitCount: number = 0;
+        damage: number = 0;
+    }
+
     class Ets2Trailer {
+        trailerNumber: number = 0;
         attached: boolean = false;
+		present: boolean = false;
         id: string = "";
         name: string = "";
-        mass: number = 0;
-        wear: number = 0;
+        wearWheels: number = 0;
+        wearChassis: number = 0;
+        cargoDamage: number = 0;
+        cargoAccessoryId: string = "";
+        brandId: string = "";
+        brand: string = "";
+        bodyType: string = "";
+        cargo: string = "";
+        licensePlate: string = "";
+        licensePlateCountry: string = "";
+        licensePlateCountryId: string = "";
+        chainType: string = "";
         placement: Ets2Placement;
         constructor() {
             this.placement = new Ets2Placement();
@@ -133,6 +161,49 @@ module Funbit.Ets.Telemetry {
         estimatedTime: string = "";
         estimatedDistance: number = 0;
         speedLimit: number = 0;
+    }
+
+    class Ets2FinedEvent {
+        fineOffense: string = "";
+        fineAmount: number = 0;
+        fined: boolean = false;
+    }
+
+    class Ets2JobEvent {
+        jobFinished: boolean = false;
+        jobCancelled: boolean = false;
+        jobDelivered: boolean = false;
+        cancelPenalty: number = 0;
+        revenue: number = 0;
+        earnedXp: number = 0;
+        cargoDamage: number = 0;
+        distance: number = 0;
+        deliveryTime: string = "";
+        autoparkUsed: boolean = false;
+        autoloadUsed: boolean = false;
+    }
+
+    class Ets2TollgateEvent {
+        tollgateUsed: boolean = false;
+        payAmount: number = 0;
+    }
+
+    class Ets2FerryEvent {
+        ferryUsed: boolean = false;
+        sourceName: string = "";
+        targetName: string = "";
+        sourceId: string = "";
+        targetId: string = "";
+        payAmount: number = 0;
+    }
+
+    class Ets2TrainEvent {
+        trainUsed: boolean = false;
+        sourceName: string = "";
+        targetName: string = "";
+        sourceId: string = "";
+        targetId: string = "";
+        payAmount: number = 0;
     }
 
     class Ets2Vector {
@@ -153,15 +224,45 @@ module Funbit.Ets.Telemetry {
     class Ets2TelemetryData {
         game: Ets2Game;
         truck: Ets2Truck;
-        trailer: Ets2Trailer;
+        cargo: Ets2Cargo;
+        trailer1: Ets2Trailer;
+        trailer2: Ets2Trailer;
+        trailer3: Ets2Trailer;
+        trailer4: Ets2Trailer;
+        trailer5: Ets2Trailer;
+        trailer6: Ets2Trailer;
+        trailer7: Ets2Trailer;
+        trailer8: Ets2Trailer;
+        trailer9: Ets2Trailer;
+        trailer10: Ets2Trailer;
         job: Ets2Job;
         navigation: Ets2Navigation;
+        finedEvent: Ets2FinedEvent;
+        jobEvent: Ets2JobEvent;
+        tollgateEvent: Ets2TollgateEvent;
+        ferryEvent: Ets2FerryEvent;
+        trainEvent: Ets2TrainEvent;
         constructor() {
             this.game = new Ets2Game();
             this.truck = new Ets2Truck();
-            this.trailer = new Ets2Trailer();
+            this.cargo = new Ets2Cargo();
             this.job = new Ets2Job();
             this.navigation = new Ets2Navigation();
+            this.trailer1 = new Ets2Trailer();
+            this.trailer2 = new Ets2Trailer();
+            this.trailer3 = new Ets2Trailer();
+            this.trailer4 = new Ets2Trailer();
+            this.trailer5 = new Ets2Trailer();
+            this.trailer6 = new Ets2Trailer();
+            this.trailer7 = new Ets2Trailer();
+            this.trailer8 =  new Ets2Trailer();
+            this.trailer9 = new Ets2Trailer();
+            this.trailer10 = new Ets2Trailer();
+            this.finedEvent = new Ets2FinedEvent();
+            this.jobEvent = new Ets2JobEvent();
+            this.tollgateEvent = new Ets2TollgateEvent();
+            this.ferryEvent = new Ets2FerryEvent();
+            this.trainEvent = new Ets2TrainEvent();
         }
     }
 

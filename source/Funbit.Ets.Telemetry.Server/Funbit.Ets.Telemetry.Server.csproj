@@ -170,10 +170,6 @@
       <Link>Ets2Plugins\win_x64\plugins\ets2-telemetry-server.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\server\Ets2Plugins\win_x86\plugins\ets2-telemetry-server.dll">
-      <Link>Ets2Plugins\win_x86\plugins\ets2-telemetry-server.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\Funbit.Ets.Telemetry.Mobile\www\images\donate-link.png">
       <Link>Html\images\donate-link.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

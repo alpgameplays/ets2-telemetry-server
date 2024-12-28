@@ -201,7 +201,7 @@ body {
 .truck-lightsParkingOn.yes {
   background-image: url("images/parklights-on.png");
 }
-.trailer-attached {
+.trailer1-attached {
   background-image: url("images/trailer-off.png");
   position: absolute;
   left: 1726px;
@@ -209,10 +209,10 @@ body {
   width: 278px;
   height: 152px;
 }
-.trailer-attached.yes {
+.trailer1-attached.yes {
   background-image: url("images/trailer-on.png");
 }
-.trailer-mass {
+.cargo-mass {
   color: #B4C3D1;
   font-family: Courier New, Courier, monospace;
   font-weight: bold;
@@ -284,8 +284,8 @@ body {
 .truck-gear,
 .truck-odometer,
 .truck-speed,
-.trailer-mass,
-.trailer-name,
+.cargo-mass,
+.cargo-cargo,
 .job-remainingTime,
 ._jobSource,
 ._jobDestionation {
@@ -296,8 +296,8 @@ body {
 .dashboard.game-connected.yes .truck-speed {
   visibility: visible;
 }
-.hasJob.yes .trailer-mass,
-.hasJob.yes .trailer-name,
+.hasJob.yes .cargo-mass,
+.hasJob.yes .cargo-cargo,
 .hasJob.yes .job-remainingTime,
 .hasJob.yes ._jobSource,
 .hasJob.yes ._jobDestionation {

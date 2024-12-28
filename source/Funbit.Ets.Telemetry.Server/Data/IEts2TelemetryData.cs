@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Configuration;
 
 namespace Funbit.Ets.Telemetry.Server.Data
 {
@@ -15,9 +17,54 @@ namespace Funbit.Ets.Telemetry.Server.Data
         IEts2Truck Truck { get; }
 
         /// <summary>
-        /// Trailer information.
+        /// Trailer 1 information.
         /// </summary>
-        IEts2Trailer Trailer { get; }
+        IEts2Trailer Trailer1 { get; }
+
+        /// <summary>
+        /// Trailer 2 information.
+        /// </summary>
+        IEts2Trailer Trailer2 { get; }
+
+        /// <summary>
+        /// Trailer 3 information.
+        /// </summary>
+        IEts2Trailer Trailer3 { get; }
+
+        /// <summary>
+        /// Trailer 4 information.
+        /// </summary>
+        IEts2Trailer Trailer4 { get; }
+
+        /// <summary>
+        /// Trailer 5 information.
+        /// </summary>
+        IEts2Trailer Trailer5 { get; }
+
+        /// <summary>
+        /// Trailer 6 information.
+        /// </summary>
+        IEts2Trailer Trailer6 { get; }
+
+        /// <summary>
+        /// Trailer 7 information.
+        /// </summary>
+        IEts2Trailer Trailer7 { get; }
+
+        /// <summary>
+        /// Trailer 8 information.
+        /// </summary>
+        IEts2Trailer Trailer8 { get; }
+
+        /// <summary>
+        /// Trailer 9 information.
+        /// </summary>
+        IEts2Trailer Trailer9 { get; }
+
+        /// <summary>
+        /// Trailer 10 information.
+        /// </summary>
+        IEts2Trailer Trailer10 { get; }
 
         /// <summary>
         /// Job information.
@@ -25,9 +72,24 @@ namespace Funbit.Ets.Telemetry.Server.Data
         IEts2Job Job { get; }
 
         /// <summary>
+        /// Cargo information.
+        /// </summary>
+        IEts2Cargo Cargo { get; }
+
+        /// <summary>
         /// Navigation information.
         /// </summary>
         IEts2Navigation Navigation { get; }
+
+        IEts2FinedGameplayEvent FinedEvent { get; }
+
+        IEts2JobGameplayEvent JobEvent { get; }
+
+        IEts2TollgateGameplayEvent TollgateEvent { get; }
+
+        IEts2FerryGameplayEvent FerryEvent { get; }
+
+        IEts2TrainGameplayEvent TrainEvent { get; }
     }
 
     public interface IEts2Game
@@ -79,6 +141,11 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// Example: 3
         /// </summary>
         float TimeScale { get; }
+
+        /// <summary>
+        /// The maximum number of trailers supported by the game. Currently this will always be 10.
+        /// </summary>
+        int MaxTrailerCount { get; }
     }
 
     public interface IEts2Vector
@@ -94,17 +161,17 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// X coordinate of the placement.
         /// Example: 13723.7881
         /// </summary>
-        float X { get; }
+        double X { get; }
         /// <summary>
         /// Y coordinate of the placement.
         /// Example: 65.22377
         /// </summary>
-        float Y { get; }
+        double Y { get; }
         /// <summary>
         /// Z coordinate of the placement.
         /// Example: 13738.8018
         /// </summary>
-        float Z { get; }
+        double Z { get; }
         /// <summary>
         /// The angle is measured counterclockwise in horizontal plane when looking
         /// from top where 0 corresponds to forward (north), 0.25 to left (west),
@@ -112,7 +179,7 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// Stored in unit range where (0,1) corresponds to (0,360).
         /// Example: 0.13688866
         /// </summary>
-        float Heading { get; }
+        double Heading { get; }
         /// <summary>
         /// The pitch angle is zero when in horizontal direction,
         /// with positive values pointing up (0.25 directly to zenith),
@@ -120,13 +187,13 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// Stored in unit range where (-0.25,0.25) corresponds to (-90,90).
         /// Example: 0.00005
         /// </summary>
-        float Pitch { get; }
+        double Pitch { get; }
         /// <summary>
         /// The angle is measured in counterclockwise when looking in direction of the roll axis.
         /// Stored in unit range where (-0.5,0.5) corresponds to (-180,180).
         /// Example: -0.00009
         /// </summary>
-        float Roll { get; }
+        double Roll { get; }
     }
 
     public interface IEts2Truck
@@ -551,6 +618,21 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// Example: 22
         /// </summary>
         float BatteryVoltageWarningValue { get; }
+
+        /// <summary>
+        /// The truck's license plate
+        /// </summary>
+        string LicensePlate { get; }
+
+        /// <summary>
+        /// Id of the truck's license plate's country for internal use by code.
+        /// </summary>
+        string LicensePlateCountryId { get; }
+
+        /// <summary>
+        /// The localized name of the truck's license plate's country
+        /// </summary>
+        string LicensePlateCountry { get; }
     }
 
     public interface IEts2Navigation
@@ -581,6 +663,21 @@ namespace Funbit.Ets.Telemetry.Server.Data
         /// Example: 2316
         /// </summary>
         int Income { get; }
+
+        /// <summary>
+        /// Flag indicating whether or not the job is a special transport job
+        /// </summary>
+        bool SpecialTransport { get; }
+
+        /// <summary>
+        /// The job market this job is from. Possible values:
+        ///   - cargo_market
+        ///   - quick_job
+        ///   - freight_market
+        ///   - external_contracts
+        ///   - external_market
+        /// </summary>
+        string JobMarket { get; }
 
         /// <summary>
         /// Absolute in-game time of end of job delivery window.
@@ -619,34 +716,301 @@ namespace Funbit.Ets.Telemetry.Server.Data
     public interface IEts2Trailer
     {
         /// <summary>
-        /// Id of the cargo for internal use by code.
-        /// Example: "derrick"
+        /// The trailer number. 1 -> First trailer; 10 -> Last trailer
         /// </summary>
-        string Id { get; }
-        /// <summary>
-        /// Localized name of the current trailer for display purposes.
-        /// Example: "Derrick"
-        /// </summary>
-        string Name { get; }
+        int TrailerNumber { get; }
+
         /// <summary>
         /// Is the trailer attached to the truck or not.
         /// </summary>
         bool Attached { get; }
+
         /// <summary>
-        /// Mass of the cargo in kilograms.
-        /// Example: 22000
+        /// Does the trailer exist in the game world
         /// </summary>
-        float Mass { get; }
+        bool Present { get; }
+
+        /// <summary>
+        /// Id of the trailer for internal use by code.
+        /// Example: "derrick"
+        /// </summary>
+        string Id { get; }
+
+        /// <summary>
+        /// Id of the trailer's cargo accessory for internal use by code.
+        /// </summary>
+        string CargoAccessoryId { get; }
+
+        /// <summary>
+        /// The trailer's body type
+        /// </summary>
+        string BodyType { get; }
+
+        /// <summary>
+        /// Id of the trailer brand for internal use by code.
+        /// </summary>
+        string BrandId { get; }
+
+        /// <summary>
+        /// Localized name of the trailer's brand.
+        /// </summary>
+        string Brand { get; }
+        /// <summary>
+        /// Localized name of the current trailer for display purposes.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// The chain type(?)
+        /// </summary>
+        string ChainType { get; }
+
+        /// <summary>
+        /// The trailer's license plate
+        /// </summary>
+        string LicensePlate { get; }
+
+        /// <summary>
+        /// The localized name of the license plate's country
+        /// </summary>
+        string LicensePlateCountry { get; }
+
+        /// <summary>
+        /// Id of the license plate's country for internal use by code.
+        /// </summary>
+        string LicensePlateCountryId { get; }
+
         /// <summary>
         /// Current trailer placement in the game world.
         /// </summary>
         IEts2Placement Placement { get; }
+
         /// <summary>
-        /// Current level of trailer wear/damage between 0 (min) and 1 (max).
+        /// Current level of cargo damage respective to this specific trailer between 0 (min) and 1 (max).
         /// Example: 0.0314717
         /// </summary>
-        float Wear { get; }
+        float CargoDamage { get; }
+
+        /// <summary>
+        /// Current level of trailer chassis wear/damage between 0 (min) and 1 (max).
+        /// Example: 0.0314717
+        /// </summary>
+        float WearChassis { get; }
+
+        /// <summary>
+        /// Current level of trailer wheels wear/damage between 0 (min) and 1 (max).
+        /// Example: 0.0314717
+        /// </summary>
+        float WearWheels { get; }
     }
+
+    public interface IEts2Cargo
+    {
+        /// <summary>
+        /// Flag indicating whether or not cargo has been loaded into the player's trailer (for non-cargo market jobs this is always true)
+        /// </summary>
+        bool CargoLoaded { get; }
+
+        /// <summary>
+        /// Id of the cargo for internal use by code
+        /// </summary>
+        string CargoId { get; }
+
+        /// <summary>
+        /// Localized name of the current cargo for display purposes
+        /// </summary>
+        string Cargo { get; }
+
+        /// <summary>
+        /// Mass of the cargo in kilograms across all trailers
+        /// </summary>
+        float Mass { get; }
+
+        /// <summary>
+        /// Mass of an individual piece of cargo in kilograms
+        /// </summary>
+        float UnitMass { get; }
+
+        /// <summary>
+        /// The number of units of cargo across all trailers
+        /// </summary>
+        int UnitCount { get; }
+
+        /// <summary>
+        /// Current level of cargo damage between 0 (min) and 1 (max) across all trailers.
+        /// </summary>
+        float Damage { get; }
+    }
+
+    #region Events
+
+    public interface IEts2FinedGameplayEvent
+    {
+        /// <summary>
+        /// The offense the user committed that resulted in the fine. Possible values:
+        ///   - crash              Player crashed into another vehicle (or vice-versa)
+        ///   - avoid_sleeping     Player ignored sleeping requirements
+        ///   - wrong_way          Player drove on wrong side of road
+        ///   - speeding_camera    Player caught speeding by a traffic camera
+        ///   - no_lights          Player caught driving with headlights off during nighttime hours
+        ///   - red_signal         Player drove through a red signal
+        ///   - speeding           Player caught speeding by a police officer on the road
+        ///   - avoid_weighing     Player skipped weigh station when prompted (ATS only)
+        ///   - illegal_trailer    Player drove a trailer into a country that does not allow the player's trailer configuration
+        ///   - generic            ???
+        /// </summary>
+        string FineOffense { get; }
+
+        /// <summary>
+        /// The amount of the fine
+        /// </summary>
+        int FineAmount { get; }
+
+        /// <summary>
+        /// Flag determining whether or not a player has been fined
+        /// </summary>
+        bool Fined { get; }
+    }
+
+    public interface IEts2JobGameplayEvent
+    {
+        /// <summary>
+        /// Flag determining whether or not a job has been finished
+        /// </summary>
+        bool JobFinished { get; }
+
+        /// <summary>
+        /// Flag determining whether or not a job has been cancelled
+        /// </summary>
+        bool JobCancelled { get; }
+
+        /// <summary>
+        /// Flag determining whether or not a job has been delivered
+        /// </summary>
+        bool JobDelivered { get; }
+
+        /// <summary>
+        /// The penalty amount when a job is cancelled
+        /// </summary>
+        int CancelPenalty { get; }
+
+        /// <summary>
+        /// The amount the player receives when a job is completed
+        /// </summary>
+        int Revenue { get; }
+
+        /// <summary>
+        /// The amount of XP the player received for completing the job
+        /// </summary>
+        int EarnedXp { get; }
+
+        /// <summary>
+        /// The percentage of cargo that was damaged
+        /// </summary>
+        float CargoDamage { get; }
+
+        /// <summary>
+        /// The distance the player drove to complete the job, in km
+        /// </summary>
+        int Distance { get; }
+
+        /// <summary>
+        /// The time the player took to complete the job, in minutes
+        /// </summary>
+        DateTime DeliveryTime { get; }
+
+        /// <summary>
+        /// Flag determining whether or not the player used auto-park
+        /// </summary>
+        bool AutoparkUsed { get; }
+
+        /// <summary>
+        /// Flag determining whether or not the player used autoload (always `true` for non-cargo market jobs)
+        /// </summary>
+        bool AutoloadUsed { get; }
+    }
+
+    public interface IEts2TollgateGameplayEvent
+    {
+        /// <summary>
+        /// Flag determining whether or not a player used a tollgate/toll booth
+        /// </summary>
+        bool TollgateUsed { get; }
+
+        /// <summary>
+        /// The toll amount paid by the player
+        /// </summary>
+        int PayAmount { get; }
+    }
+
+    public interface IEts2FerryGameplayEvent
+    {
+        /// <summary>
+        /// Flag determining whether or not the player used a ferry
+        /// </summary>
+        bool FerryUsed { get; }
+
+        /// <summary>
+        /// Localized name of the source location
+        /// </summary>
+        string SourceName { get; }
+
+        /// <summary>
+        /// Localized name of the target location
+        /// </summary>
+        string TargetName { get; }
+
+        /// <summary>
+        /// Id of the source location for internal use by code
+        /// </summary>
+        string SourceId { get; }
+
+        /// <summary>
+        /// Id of the target location for internal use by code
+        /// </summary>
+        string TargetId { get; }
+
+        /// <summary>
+        /// The amount paid by the player
+        /// </summary>
+        int PayAmount { get; }
+    }
+
+    public interface IEts2TrainGameplayEvent
+    {
+        /// <summary>
+        /// Flag determining whether or not the player used a train
+        /// </summary>
+        bool TrainUsed { get; }
+
+        /// <summary>
+        /// Localized name of the source location
+        /// </summary>
+        string SourceName { get; }
+
+        /// <summary>
+        /// Localized name of the target location
+        /// </summary>
+        string TargetName { get; }
+
+        /// <summary>
+        /// Id of the source location for internal use by code
+        /// </summary>
+        string SourceId { get; }
+
+        /// <summary>
+        /// Id of the target location for internal use by code
+        /// </summary>
+        string TargetId { get; }
+
+        /// <summary>
+        /// The amount paid by the player
+        /// </summary>
+        int PayAmount { get; }
+    }
+
+    #endregion
+
 
     /*
     public interface IEts2Wheel

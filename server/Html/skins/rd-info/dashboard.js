@@ -47,8 +47,8 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data, utils) {
 	//data.truckSpeedMph = data.truckSpeed * 0.621371;
     
 	// convert kg to t
-	data.hasJob = data.trailer.attached;
-	data.trailer.mass = (data.trailer.mass / 1000.0) + 't';
+	data.hasJob = data.job.jobMarket != '';
+	data.cargo.mass = (data.cargo.mass / 1000.0) + 't';
 
 	//data.jobIncome = '€' + data.jobIncome;
 	data.job.sourceCity = data.job.sourceCity + ' (' + data.job.sourceCompany + ')';
@@ -56,7 +56,7 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data, utils) {
 	data.truck.fuel = Math.round(data.truck.fuel) + 'L';
 	data.truck.fuelAverageConsumption = utils.formatFloat(data.truck.fuelAverageConsumption * 100 ,1) + 'L';
 	data._fuelAvg = 'x 100Km';
-	data.trailer.name = data.trailer.name + ' (' + data.trailer.mass + ')';
+	data.cargo.cargo = data.cargo.cargo + ' (' + data.cargo.mass + ')';
 	data.truck.make = data.truck.make + ' ' + data.truck.model;
 	data.truck.wearEngine = Math.round(data.truck.wearEngine * 100) + '%';
 	data.truck.wearCabin = Math.round(data.truck.wearCabin * 100) + '%';
@@ -78,7 +78,15 @@ Funbit.Ets.Telemetry.Dashboard.prototype.filter = function (data, utils) {
 	data.color = (utils.formatFloat(data.truck.speed ,0) > data.navigation.speedLimit) ? '#FFFFFF' : '#FF0000';
 	//data.engineRpm = data.engineRpm / 100;
 
-	data.trailer.wear = Math.round(data.trailer.wear * 100) + '%'; 
+	var connectedTrailers = 0;
+	wearSumPercent = 0;
+	for (var i = 1; i <= data.game.maxTrailerCount; i++) {
+		if (data['trailer' + i].present) {
+			connectedTrailers++;
+			wearSumPercent += data['trailer' + i].wearChassis * 100;
+		}
+	}
+	data.job.trailerWear = Math.floor(wearSumPercent / connectedTrailers) + '%';
 	// return changed data to the core for rendering
     
 	return data;
