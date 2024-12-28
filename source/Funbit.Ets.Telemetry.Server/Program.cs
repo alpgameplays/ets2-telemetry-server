@@ -15,6 +15,8 @@ namespace Funbit.Ets.Telemetry.Server
         private const int ErrorAlreadyExists = 183;
 
         public static bool UninstallMode;
+        public static MessageNotifier NotifierMessage;
+
 
         /// <summary>
         /// The main entry point for the application.
@@ -40,6 +42,7 @@ namespace Funbit.Ets.Telemetry.Server
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             UninstallMode = args.Length >= 1 && args.Any(a => a.Trim() == "-uninstall");
+            NotifierMessage = new MessageNotifier();
 
             Application.Run(new MainForm());
         }

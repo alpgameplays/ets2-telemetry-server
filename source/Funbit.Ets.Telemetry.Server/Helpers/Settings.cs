@@ -12,6 +12,7 @@ namespace Funbit.Ets.Telemetry.Server.Helpers
         public string DefaultNetworkInterfaceId { get; set; }
         public string Ets2GamePath { get; set; }
         public string AtsGamePath { get; set; }
+        public string ArduinoPort { get; set; }
 
         public bool FirewallSetupHadErrors { get; set; }
         public bool UrlReservationSetupHadErrors { get; set; }
