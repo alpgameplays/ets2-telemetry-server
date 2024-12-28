@@ -11,38 +11,47 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
     {
         private SerialPort _serialPort;
         private string _currentPortName;
+        private string _deviceName;
+
+
+
 
         public void OpenPort(string portName)
         {
-            
-            if (_serialPort != null && _serialPort.IsOpen)
+
+            try
             {
+
+                //if (_serialPort != null && _serialPort.IsOpen)
+                //{
                 ClosePort();
+                //}
+
+                _currentPortName = portName;
+                _serialPort = new SerialPort(portName, 115200)
+                {
+                    Parity = Parity.None,
+                    StopBits = StopBits.One,
+                    DataBits = 8,
+                    Handshake = Handshake.None,
+                    DtrEnable = true,
+                    WriteTimeout = 5000,
+                    ReadTimeout = 5000,
+                };
+                _serialPort.Open();
+            }
+            catch (Exception ex) {
+                Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
+
             }
 
-            _currentPortName = portName;
-            _serialPort = new SerialPort(portName, 115200)
-            {
-                Parity = Parity.None,
-                StopBits = StopBits.One,
-                DataBits = 8,
-                Handshake = Handshake.None,
-                DtrEnable = true,
-                WriteTimeout = 5000
-            };
-            _serialPort.Open();
-
-            var deviceName = _serialPort.ReadLine();
-
-            var devicePortName = ArduinoHleper.GetDeviceName(_currentPortName);
-            Program.NotifierMessage.LogMessage = new LogMessage(true, $"Conexão estabelecida com {devicePortName}\nDispositivos: {deviceName}");
-            
         }
 
         public void ClosePort()
         {
             _serialPort?.Close();
             _serialPort = null;
+            _deviceName = null;
         }
 
         public bool IsPortOpen()
@@ -67,6 +76,36 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
                 OpenPort(newPortName);
             }
 
+        }
+
+        public void ReadFromPort()
+        {
+            if (_deviceName == null)
+            {
+                try
+                {
+
+                    _deviceName = _serialPort?.ReadLine();
+                    var devicePortName = GetDeviceName(); ;
+                    Program.NotifierMessage.LogMessage = new LogMessage(true, $"Conexão estabelecida com {devicePortName}\nDispositivos: {_deviceName}");
+                }
+                catch(Exception ex)
+                {
+                    _deviceName = null;
+                    Program.NotifierMessage.LogMessage = new LogMessage(true, $"Erro geral: {ex.Message}");
+
+
+                }
+
+
+               
+            }
+            //return _serialPort?.ReadLine() ;
+        }
+
+        public string GetDeviceName()
+        {
+            return ArduinoHleper.GetDeviceName(_currentPortName);
         }
     }
 }

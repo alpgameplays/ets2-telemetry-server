@@ -10,5 +10,8 @@ namespace Funbit.Ets.Telemetry.Server.Controllers
         void ClosePort();
         bool IsPortOpen();
         void WriteToPort(string message);
+        void ReadFromPort();
+
+        string GetDeviceName();
     }
 }

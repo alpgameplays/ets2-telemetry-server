@@ -331,5 +331,10 @@ namespace Funbit.Ets.Telemetry.Server
             
 
         }
+
+        private void refreshPortsButton_Click(object sender, EventArgs e)
+        {
+            LoadArduinoPorts();
+        }
     }
 }
